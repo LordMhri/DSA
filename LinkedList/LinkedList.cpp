@@ -89,7 +89,6 @@ public:
     }   
 
 
-    //passing by reference here because the head ptr itself is being modified
     void deleteFromTheFront(){ 
         if (!head)
         {
@@ -114,8 +113,7 @@ public:
             cout << ptr->data << "\n";
             ptr = ptr->next;
         }
-        
-        
+ 
     }
        
 };
