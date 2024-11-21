@@ -51,6 +51,45 @@ public:
         cout << endl;
     }
     
+    bool isPalindrome(const string &str)
+    {
+        stackLinkedList tempStack;
+        for (char ch : str)
+        {
+            tempStack.push(ch);
+        }
+
+        for (char ch : str)
+        {
+            if (ch != tempStack.top->data)
+            {
+                return false;
+            }
+            tempStack.pop();
+        }
+        return true;
+    }
+
+    int binaryToDecimal(const string &binaryStr)
+    {
+        stackLinkedList tempStack;
+        for (char ch : binaryStr)
+        {
+            tempStack.push(ch - '0');
+        }
+
+        int decimalValue = 0;
+        int base = 1; 
+
+        while (tempStack.top != nullptr)
+        {
+            decimalValue += tempStack.top->data * base;
+            base *= 2;
+            tempStack.pop();
+        }
+
+        return decimalValue;
+    }
 };
 
 int main(int argc, char const *argv[])
@@ -61,6 +100,20 @@ int main(int argc, char const *argv[])
         ls.push(i * 2);
     }
     ls.display();
+
+    string testStr = "radar";
+    if (ls.isPalindrome(testStr))
+    {
+        cout << testStr << " is a palindrome" << endl;
+    }
+    else
+    {
+        cout << testStr << " is not a palindrome" << endl;
+    }
+
+    string binaryStr = "1011";
+    int decimalValue = ls.binaryToDecimal(binaryStr);
+    cout << "Binary " << binaryStr << " is " << decimalValue << " in decimal" << endl;
 
     return 0;
 }
