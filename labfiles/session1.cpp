@@ -52,6 +52,51 @@ void simpleSort(int arr[],int n) {
     cout << endl;
 }
 
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+void binaryInsertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int left = 0;
+        int right = i - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] > key) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        
+        for (int j = i - 1; j >= left; j--) {
+            arr[j + 1] = arr[j];
+        }
+        arr[left] = key;
+    }
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
 int main(int argc, char const *argv[]) {
     int check[] = {1, 2, 3, 4, 3, 21};
     int idx = linear_search(check, sizeof(check) / sizeof(int), 21);

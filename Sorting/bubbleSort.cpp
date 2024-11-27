@@ -3,15 +3,19 @@
 
 using namespace std;
 
-void bubbleSort(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                swap(arr[j], arr[j + 1]);
-            }
+void bubbleSort(int arr[],int size){
+    for (int i = size - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < i; j++)
+        {
+        if (arr[j+1] < arr[j])
+        {
+            swap(arr[j + 1], arr[j]);
         }
+        }
+        
     }
+    
 }
 
 void swap(int &a, int &b) {
@@ -22,10 +26,12 @@ void swap(int &a, int &b) {
 
 int main(int argc, char const *argv[])
 {
-    vector<int> arr = {5, 2, 8, 12, 1};
-    bubbleSort(arr);
-    for (int num:arr){
-        cout << num << " ";
+    int arr[] = {5, 2, 8, 12, -1};
+    bubbleSort(arr,5);
+    for (int i = 0; i < 5; i++)
+    {
+        cout << arr[i] << endl;
     }
+
     return 0;
 }
