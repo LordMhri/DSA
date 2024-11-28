@@ -70,26 +70,30 @@ public:
         return true;
     }
 
-    int binaryToDecimal(const string &binaryStr)
+    
+string DecimalToBinary(int number)
+{
+    if (number == 0)
     {
-        stackLinkedList tempStack;
-        for (char ch : binaryStr)
-        {
-            tempStack.push(ch - '0');
-        }
-
-        int decimalValue = 0;
-        int base = 1; 
-
-        while (tempStack.top != nullptr)
-        {
-            decimalValue += tempStack.top->data * base;
-            base *= 2;
-            tempStack.pop();
-        }
-
-        return decimalValue;
+        return "0";
     }
+
+    stackLinkedList binaryStack;
+    while (number > 0)
+    {
+        binaryStack.push(number % 2);
+        number /= 2;
+    }
+
+    string binaryString;
+    while (binaryStack.top != nullptr)
+    {
+        binaryString += to_string(binaryStack.top->data);
+        binaryStack.pop();
+    }
+
+    return binaryString;
+}
 };
 
 int main(int argc, char const *argv[])
@@ -111,9 +115,6 @@ int main(int argc, char const *argv[])
         cout << testStr << " is not a palindrome" << endl;
     }
 
-    string binaryStr = "1011";
-    int decimalValue = ls.binaryToDecimal(binaryStr);
-    cout << "Binary " << binaryStr << " is " << decimalValue << " in decimal" << endl;
 
     return 0;
 }

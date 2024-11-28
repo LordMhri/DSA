@@ -49,7 +49,6 @@ public:
         if (top >= 0) {
             return arr[top];
         }
-        throw out_of_range("Stack is empty");
     }
 
     void display() {
