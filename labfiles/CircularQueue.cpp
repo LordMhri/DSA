@@ -28,7 +28,17 @@ class CircularQueue
             size++;
         }
     }
-    
+
+    void peek(){
+        if (front == -1)
+        {
+            cout << "Queue is empty\n";
+            return;
+        }
+
+        cout << array[front] << endl;
+    }
+
     void dequeue() {
         if (size == 0) {
             cout << "Queue is Empty\n";
@@ -40,6 +50,19 @@ class CircularQueue
             }
             size--;
         }
+    }
+
+    string isEmpty(){
+        return (front == -1) ? "True" : "False";
+    }
+
+    string isFull(){
+        return (front != -1) ? "True" : "False";
+    }
+
+    void clear(){
+        front = rear = -1;
+        size = 0;
     }
 
     void print() {
@@ -63,6 +86,7 @@ class CircularQueue
 
 int main() {
     CircularQueue q(5);
+    q.isEmpty();
     for (int i = 0; i < 5; i++)
     {
         q.enqueue(i + 1);
@@ -72,6 +96,11 @@ int main() {
     q.dequeue();
     q.print();
     q.enqueue(6);
+    q.peek();
+    q.isEmpty();
     q.print();
+    q.clear();
+    q.print();
+
     return 0;
 }
