@@ -1,69 +1,168 @@
 #include <iostream>
-
 using namespace std;
 
-struct Node {
+struct Node
+{
+    int data;
     Node *left;
     Node *right;
-    int data;
-
-    Node(int data) : left(nullptr), right(nullptr), data(data) {};
+    Node(int val) : data(val), left(nullptr), right(nullptr) {};
 };
 
 class BinarySearchTree
 {
-private:
-    Node *root;
 public:
-    BinarySearchTree() : root(nullptr) {};
-    
-    //deletion by copying 
-    //deletion by merging
+    Node *root;
 
-    Node* deleteNode(Node *root,int value){
+    BinarySearchTree() : root(nullptr) {};
+
+    void insert(int data)
+    {
+        root = insertRec(root, data);
+    }
+
+    void deleteNode(int value)
+    {
+        root = deleteRec(root, value);
+    }
+
+    void printInorderTraversal()
+    {
+        inorderTraversal(root);
+        cout << endl;
+    }
+
+    void printPostOrderTraversal()
+    {
+        postOrderTraversal(root);
+        cout << endl;
+    }
+
+    int heightTree(Node *root){
+        if (!root)
+        {
+            return 0;
+        }
+        int left_height = heightTree(root->left);
+        int right_height = heightTree(root->right);
+        if (left_height >= right_height)
+        {
+            return left_height + 1;
+        } else {
+            return right_height + 1;
+        }
+    }
+    
+    int depthOfANode(Node* node, int data, int depth = 0) {
+        if (node == nullptr) {
+            return -1; // Node not found
+        }
+        if (node->data == data) {
+            return depth;
+        }
+        int leftDepth = depthOfANode(node->left, data, depth + 1);
+        if (leftDepth != -1) {
+            return leftDepth;
+        }
+        return depthOfANode(node->right, data, depth + 1);
+    }
+
+    void depthOfANode(int data){
+        int depth = depthOfANode(root, data);
+        if (depth != -1) {
+            cout << "Depth of node with data " << data << " is: " << depth << endl;
+        } else {
+            cout << "Node with data " << data << " not found in the tree." << endl;
+        }
+    }
+
+    void printPreOrderTraversal(){
+        preOrderTraversal(root);
+        cout << endl;
+    }
+
+private:
+    Node *insertRec(Node *node, int data)
+    {
+        if (node == nullptr)
+        {
+            return new Node(data);
+        }
+        if (data < node->data)
+        {
+            node->left = insertRec(node->left, data);
+        }
+        else if (data > node->data)
+        {
+            node->right = insertRec(node->right, data);
+        }
+        return node;
+    }
+
+    Node *deleteRec(Node *root, int value)
+    {
         if (root == nullptr)
         {
             return root;
-        }   
+        }
         if (root->data < value)
         {
-            root->right = deleteNode(root, value);
-        } else if (root->data > value){
-            root->left = deleteNode(root, value);
-        } else {
-            //this means we've identifed the node to be removed
-            //if node has only one child
-            //left or right is nullptr
+            root->right = deleteRec(root->right, value);
+        }
+        else if (root->data > value)
+        {
+            root->left = deleteRec(root->left, value);
+        }
+        else
+        {
             if (root->left == nullptr)
             {
-                //right child exists so
-                //make right child the deleted node?
                 Node *temp = root->right;
                 delete root;
                 return temp;
-            } else if(root->right == nullptr){
+            }
+            else if (root->right == nullptr)
+            {
+                Node *temp = root->left;
+                delete root;
+                return temp;
+            }
+            Node *temp = minValueNode(root->right);
+            root->data = temp->data;
+            root->right = deleteRec(root->right, temp->data);
+        }
+        return root;
+    }
+
+    Node *deleteMerge(Node*root,int value){
+        if (root == nullptr)
+        {
+            return root;
+        } else if(root->left == nullptr){
+            root->right = deleteMerge(root->right,value);
+        } else if(root->right == nullptr){
+            root->left = deleteMerge(root->left,value);
+        } else {
+            if (root->left ==nullptr)
+            {
+                Node *temp = root->right;
+                delete root;
+                return temp; 
+            } else if (root->right == nullptr){
                 Node *temp = root->left;
                 delete root;
                 return temp;
             }
 
-            Node *temp = maxValueNode(root->left);
-            root->data = temp->data;
-            root->left = deleteNode(root->left, temp->data);
+            Node *temp = minValueNode(root->right);
+            temp->right = root->right;
+            return root->left;
         }
         return root;
     }
 
-    Node *maxValueNode(Node* root){
-        Node *current = root;
-        while (current && current->right != nullptr){
-            current = current->right;
-        }
-
-        return current;
-    }
-
-    Node *minValueNode(Node *root){
+    Node *minValueNode(Node *root)
+    {
         Node *current = root;
         while (current && current->left != nullptr)
         {
@@ -72,109 +171,58 @@ public:
         return current;
     }
 
-    void insert(int data) {
-        if (!root)
-        {
-            root = new Node(data);
-            return;
-        }
-
+    Node *maxValueNode(Node *root)
+    {
         Node *current = root;
-
-        while (true)
+        while (current && current->right != nullptr)
         {
-            if (data < current->data) { // if the current data is less than the root data
-                if (current->left == nullptr) //if left node doesn't exist
-                {
-                    current->left = new Node(data);
-                    break;
-                }
-                current = current->left; 
-                // continue as long as we dont find an appropriate place
-                // to put the new node in
-
-            } else {
-                if (current->right == nullptr)
-                {
-                    current->right = new Node(data);
-                    break;
-                }
-                current = current->right;
-            }
+            current = current->right;
         }
+        return current;
     }
 
-        void printInorderTraversal() {
-            printINT(root);
-        }
-
-        void printPostOrderTraversal(){
-            printPST(root);
-        }
-
-        void printPreOrderTraversal(){
-            printPRE(root);
-        }
-
-        
-
-    private:
-    //in order traversal left -> parent -> right
-        void inorderTraversal(Node *root) {
-            if (root == nullptr) {
-                return;
-            }
-            inorderTraversal(root->left);
-            cout << root->data << " ";
-            inorderTraversal(root->right);
-        }
-
-        void postOrderTraversal(Node *node){
-            if (node == nullptr)
-            {
-                return;
-            }
-            postOrderTraversal(node->left);
-            postOrderTraversal(node->right);
-            cout << node->data << " ";
-        }
-
-        void preOrderTraversal(Node *node)
+    void inorderTraversal(Node *node)
+    {
+        if (node == nullptr)
         {
-            if (node == nullptr)
-            {
-                return;
-            }
-            cout << node->data << " ";
-            postOrderTraversal(node->left);
-            postOrderTraversal(node->right);
-            
+            return;
         }
+        inorderTraversal(node->left);
+        cout << node->data << " ";
+        inorderTraversal(node->right);
+    }
 
-        void printPST(Node *root){
-            postOrderTraversal(root);
-            cout << endl;
+    void postOrderTraversal(Node *node)
+    {
+        if (node == nullptr)
+        {
+            return;
         }
+        postOrderTraversal(node->left);
+        postOrderTraversal(node->right);
+        cout << node->data << " ";
+    }
 
-        void printINT(Node *root) {
-            inorderTraversal(root);
-            cout << endl;
+    void preOrderTraversal(Node *node)
+    {
+        if (node == nullptr)
+        {
+            return;
         }
-
-        void printPRE(Node *root){
-            preOrderTraversal(root);
-            cout << endl;
-        }
+        cout << node->data << " ";
+        preOrderTraversal(node->left);
+        preOrderTraversal(node->right);
+    }
 };
 
-int main(int argc, char const *argv[])
+int main()
 {
     BinarySearchTree Btree;
     int num = 4096;
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 1; i < 10; i++)
     {
-        Btree.insert(i+1);
+        Btree.insert(i + 1);
     }
 
     for (int i = 0; i < 10; i++)
@@ -188,13 +236,13 @@ int main(int argc, char const *argv[])
     cout << "Now post order\n";
     Btree.printPostOrderTraversal();
 
+    Btree.deleteNode(121312);
+
     cout << "Now pre order\n";
     Btree.printPreOrderTraversal();
 
     return 0;
 }
-
-
 
 /*
                         9
