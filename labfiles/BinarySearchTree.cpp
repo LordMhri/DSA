@@ -38,20 +38,11 @@ public:
         cout << endl;
     }
 
-    int heightTree(Node *root){
-        if (!root)
-        {
-            return 0;
-        }
-        int left_height = heightTree(root->left);
-        int right_height = heightTree(root->right);
-        if (left_height >= right_height)
-        {
-            return left_height + 1;
-        } else {
-            return right_height + 1;
-        }
+    int height(){
+        return heightOfTree(root);
     }
+
+    
     
     int depthOfANode(Node* node, int data, int depth = 0) {
         if (node == nullptr) {
@@ -82,6 +73,24 @@ public:
     }
 
 private:
+    int heightOfTree(Node *root)
+    {
+        if (!root)
+        {
+            return 0;
+        }
+        int left_height = heightOfTree(root->left);
+        int right_height = heightOfTree(root->right);
+        if (left_height >= right_height)
+        {
+            return left_height + 1;
+        }
+        else
+        {
+            return right_height + 1;
+        }
+    }
+
     Node *insertRec(Node *node, int data)
     {
         if (node == nullptr)
@@ -240,6 +249,10 @@ int main()
 
     cout << "Now pre order\n";
     Btree.printPreOrderTraversal();
+
+    Btree.depthOfANode(16);
+
+    cout << "Height of tree is " << Btree.height() << "\n";
 
     return 0;
 }
