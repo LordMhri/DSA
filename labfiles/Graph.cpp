@@ -65,23 +65,73 @@ public:
         }    
     }
 
+    void DFS(int startVertex){
+        vector<bool> visited (V,false);
+        DFS(visited,startVertex);
+
+    }
+
 private:
     int V;
     vector<vector<int>> adj;
+
+    void DFS(vector<bool>&visited,int startVertex){
+        visited[startVertex] = true;
+
+        cout << "Just visited " << startVertex << endl;
+
+        for (int &i: adj[startVertex])
+        {
+            if (!visited[i])
+            {
+                DFS(visited,i);
+            }
+            
+
+        }
+        
+    }
 };
 
 int main() {
-    Graph g(5);
-    g.addEdge(0, 1);
+    Graph g(6);
     g.addEdge(0, 4);
+    g.addEdge(0, 1); 
+    g.addEdge(1, 5);
     g.addEdge(1, 2);
-    g.addEdge(1, 3);
     g.addEdge(2, 3);
     g.addEdge(3, 4);
-    g.addEdge(4, 1);
+    g.addEdge(4, 5);
 
     g.BFS(0);
     g.printGraph();
+
+    g.DFS(0);
+    /*
+        for the DFS call
+
+        first we process 0 so print "visited 0"
+        then we process the first neighbor of 0 , in the order they were added  so 0 : 4,1
+        so we process 4 first so print "visited 4"
+        now for 4 when we connected 0 and 4 we added 0 as a neighbor to 4
+        so 4 : 0 then we added 4 as a neighbor to 3 which means 3 is a neighbor to 4
+        so 4: 0,3 then we added 5 so 4 looks like 4:0,3,5
+        now the recursive call calls 0 but we've already seen it so we pass it and then call
+        the next neighbor which is 3 so print "visited 3"
+        then go to the neighbors of 3 which are 2 and 4
+        so we process 2 so "visited 2"
+        and we go to the neighbors of 2 which are 1 and 2
+        so we process 1 so print "visited 1"
+        and we go to the neighbors of 1 which are 0,5,2
+        we've seen 0 before so pass it we go to 5
+        so we process 5 so "visited 5" and we've seen 2 before so the call stack pops DFS(1) from the call stack
+        when DFS(5) finishes, the program returns to DFS(1), which continues with the next neighbor.
+        Since no more unvisited neighbors are found, we then return to DFS(2).
+        The calls stack continues to unwind to DFS(3), DFS(4) then DFS(0).
+    
+
+        we're left with visited 0,visited 4,visited 3,visited 2,visited 1 and visited 5
+    */
 
     return 0;
 }
