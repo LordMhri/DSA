@@ -47,6 +47,16 @@ public:
         cout << head->data << endl;
     }
 
+    void display(){
+        Node *ptr = head;
+        while (ptr)
+        {
+
+            cout << ptr->data << "," << ptr->priority << endl;
+        }
+
+        cout << endl;
+    }
 };
 
 
@@ -54,6 +64,16 @@ public:
 
 int main(int argc, char const *argv[])
 {
+
+    priorityQueue pq;
+    pq.insert(10, 2);
+    pq.insert(20, 1);
+    pq.insert(30, 3);
+
+    pq.display();
+
+    cout << "Element with highest priority: ";
+    pq.peekMax();
     
     return 0;
 }
