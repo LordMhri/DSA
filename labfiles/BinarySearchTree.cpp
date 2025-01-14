@@ -195,6 +195,10 @@ private:
                 Node *temp = root->right;
                 delete root;
                 return temp;
+            } else if(root->right == nullptr) {
+                Node *temp = root->left;
+                delete root;
+                return temp;
             }
             else
             {
