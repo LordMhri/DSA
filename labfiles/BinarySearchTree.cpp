@@ -196,27 +196,23 @@ private:
                 delete root;
                 return temp;
             }
-            else if (root->right == nullptr)
-            {
-                Node *temp = root->left;
-                delete root;
-                return temp;
-            }
             else
             {
-                Node *temp;
-                if (choice == 1)
+                if (choice == 1) // delete by merging the maxNode from the left
                 {
-                    temp = minValueNode(root->right);
-                    root->data = temp->data;
-                    root->right = deleteMerge(root->right, temp->data, choice);
+                    Node *temp = maxValueNode(root->left);
+                    temp->right = root->right;
+                    temp = root;
+                    root = root->left;
+                    delete temp;
+                } else { //delete by merging the minNode from the right
+                    Node *temp = minValueNode(root->right);
+                    temp->left = root->left;
+                    temp = root;
+                    root = root->right;
+                    delete temp;
                 }
-                else
-                {
-                    temp = maxValueNode(root->left);
-                    root->data = temp->data;
-                    root->left = deleteMerge(root->left, temp->data, choice);
-                }
+
             }
         }
 
@@ -335,7 +331,7 @@ int main()
             cin >> value;
             Copy = Btree;
             Btree.deleteByMerge(value);
-            cout << "Height of tree After Deletion by Copy: " << Copy.height() << endl;
+            cout << "Height of tree After Deletion by Merge: " << Copy.height() << endl;
             cout << "InOrderTraversal After Deletion: ";
             Copy.printInorderTraversal();
             break;
